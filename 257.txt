@@ -1,0 +1,79 @@
+MY SOLUTION
+	class Solution {
+	public:
+		vector<string> ansv;
+		string stack;
+		vector<string> binaryTreePaths(TreeNode* root) 
+		{
+			if (root)
+			{
+				stack += to_string(root->val);
+                if (!(root->left || root->right))
+			    {
+                ansv.push_back(stack);
+				return ansv;
+			    }   
+				fillansw(root->left);
+				fillansw(root->right);
+			}
+			return ansv;
+		}
+		void fillansw(TreeNode *root)
+		{
+			if (!root)return;
+			addvalue(root->val);
+			if (!(root->left || root->right))
+			{
+				ansv.push_back(stack);
+				deletevalue();
+				return;
+			}
+			fillansw(root->left);
+			fillansw(root->right);
+			deletevalue();
+		}
+		inline void addvalue(int x)
+		{
+			stack += "->";
+			stack += to_string(x);
+		}
+		inline void deletevalue()
+		{
+            while(stack[stack.size()-1]!='>')
+            {
+			stack.pop_back();
+            }
+			stack.pop_back();
+			stack.pop_back();
+		}
+	};
+
+THEIR SOLUTION
+class Solution {
+public:
+    void binaryTreePaths_(TreeNode *root, string s, vector<string> &paths){
+        if(root == nullptr) return;
+        
+        //leaf node
+        if(root->left == nullptr && root->right == nullptr){
+            paths.push_back(s+to_string(root->val));
+            return;
+        }
+        
+        if(root->left != nullptr){
+            binaryTreePaths_(root->left, s+to_string(root->val)+"->", paths);
+        }
+        
+        if(root->right != nullptr){
+            binaryTreePaths_(root->right, s+to_string(root->val)+"->", paths);
+        }
+        
+        return;
+        
+    }
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> ret;
+        binaryTreePaths_(root, "", ret);
+        return ret;
+    }
+};
